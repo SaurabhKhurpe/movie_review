@@ -1,16 +1,12 @@
 package com.reviews.movie_review.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.reviews.movie_review.repository.ReviewRepository;
 import com.reviews.movie_review.service.response.ReviewResponse;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.*;
-//import jakarta.persistence.*;
+import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -38,7 +34,7 @@ public class Review {
     @ManyToOne
     @JoinColumn(name="movie_id", nullable=false)
     @JsonIgnore
-    private Movie movie; // it will add foregion key in mysql table with <TABLE_NAME>_<ID_NAME> --> // movie_movie_id
+    private Movie movie; // it will add FK in mysql table with <TABLE_NAME>_<ID_NAME> --> // movie_movie_id
 
     @CreationTimestamp
     private Date createdDate;

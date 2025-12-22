@@ -1,13 +1,10 @@
 package com.reviews.movie_review.controller;
 
-import com.reviews.movie_review.domain.Movie;
 import com.reviews.movie_review.service.MovieService;
 import com.reviews.movie_review.service.response.MovieResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,14 +15,28 @@ public class MovieController {
     @Autowired
     MovieService movieService;
 
-    @GetMapping("/title")
-    public MovieResponse findMovie(@RequestParam  String title){
-        return movieService.findMovie(title);
-    }
+    @GetMapping
+    public ResponseEntity<?> getMovie(
+            @RequestParam(value = "title", required = false) String title,
+            @RequestParam(value = "genre", required = false) String genre) {
 
-    @GetMapping("/genre")
-    public List<MovieResponse> findMovieByGenre(@RequestParam String genre){
-        return movieService.findMoviesByGenre(genre);
-    }
+        if (title != null && genre != null) {
+            return ResponseEntity.badRequest().body("Please provide either 'title' or 'genre', not both");
+        }
 
+        if (title != null) {
+            MovieResponse movie = movieService.findMovie(title);
+            if (movie != null && movie.getMovie_id() != null) {
+                return ResponseEntity.ok(movie);
+            }
+            return ResponseEntity.notFound().build();
+        }
+
+        if (genre != null) {
+            List<MovieResponse> movies = movieService.findMoviesByGenre(genre);
+            return ResponseEntity.ok(movies);
+        }
+
+        return ResponseEntity.badRequest().body("Either 'title' or 'genre' parameter is required");
+    }
 }
