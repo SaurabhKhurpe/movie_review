@@ -36,11 +36,9 @@ public class ReviewService {
 
     @Transactional
     public void addReviewsBulk(List<ReviewRequest> reviewRequests) {
-        // Group reviews by movieId
         Map<Long, List<ReviewRequest>> reviewsByMovie = reviewRequests.stream()
                 .collect(Collectors.groupingBy(ReviewRequest::getMovieId));
 
-        // Process each movie's reviews
         reviewsByMovie.forEach((movieId, requests) -> {
             Optional<Movie> movieOptional = movieRepository.findById(movieId);
             if(movieOptional.isPresent()) {

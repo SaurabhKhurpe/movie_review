@@ -37,7 +37,6 @@ public class Movie implements Serializable {
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews;
 
-    // In Movie.java, update toMovieResponse method:
     public MovieResponse toMovieResponse(){
         List<Review> reviewsList = getReviews();
         return MovieResponse.builder()

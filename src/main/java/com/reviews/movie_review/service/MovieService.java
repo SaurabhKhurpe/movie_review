@@ -22,7 +22,6 @@ public class MovieService {
         if (Objects.nonNull(movie)) {
             return movie.toMovieResponse();
         }
-        // Return empty response instead of null
         return MovieResponse.builder()
                 .movie_id(null)
                 .title(null)
@@ -33,8 +32,10 @@ public class MovieService {
     }
 
     public List<MovieResponse> findMoviesByGenre(String genre) {
+        if (genre == null) {
+            return new ArrayList<>();
+        }
         try {
-            // Convert genre string to uppercase for case-insensitive matching
             String genreUpper = genre.toUpperCase();
             if (Arrays.stream(Genre.values()).noneMatch(g -> g.toString().equals(genreUpper))) {
                 return new ArrayList<>();
@@ -51,7 +52,6 @@ public class MovieService {
             }
             return new ArrayList<>();
         } catch (IllegalArgumentException e) {
-            // Invalid genre enum value
             return new ArrayList<>();
         }
     }

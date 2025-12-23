@@ -29,12 +29,12 @@ public class Review {
 
     private String movieReview;
 
-    private double rating;  // rating dedicated to each review.
+    private double rating;
 
     @ManyToOne
     @JoinColumn(name="movie_id", nullable=false)
     @JsonIgnore
-    private Movie movie; // it will add FK in mysql table with <TABLE_NAME>_<ID_NAME> --> // movie_movie_id
+    private Movie movie;
 
     @CreationTimestamp
     private Date createdDate;
@@ -54,7 +54,9 @@ public class Review {
         if(Objects.isNull(reviewList))
             return new ArrayList<>();
         else
-            return reviewList.stream().map(Review::toReviewResponse).collect(Collectors.toList());
-   }
-
+            return reviewList.stream()
+                    .filter(Objects::nonNull)  // ADD THIS FILTER
+                    .map(Review::toReviewResponse)
+                    .collect(Collectors.toList());
+    }
 }
