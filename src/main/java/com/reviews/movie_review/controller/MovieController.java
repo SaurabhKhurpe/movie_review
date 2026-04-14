@@ -2,6 +2,7 @@ package com.reviews.movie_review.controller;
 
 import com.reviews.movie_review.service.MovieService;
 import com.reviews.movie_review.service.response.MovieResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +35,10 @@ public class MovieController {
 
         if (genre != null) {
             List<MovieResponse> movies = movieService.findMoviesByGenre(genre);
-            return ResponseEntity.ok(movies);
+            if (movies != null && !movies.isEmpty()) {
+                return ResponseEntity.ok(movies);
+            }
+            return ResponseEntity.notFound().build();
         }
 
         return ResponseEntity.badRequest().body("Either 'title' or 'genre' parameter is required");

@@ -56,10 +56,10 @@ class MovieControllerTest {
     @Test
     void getMovieByGenre_EmptyResult() throws Exception {
         when(movieService.findMoviesByGenre("DRAMA")).thenReturn(Collections.emptyList());
+
         mockMvc.perform(get("/movie")
                         .param("genre", "DRAMA"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(0)));
+                .andExpect(status().isNotFound());
     }
 
     @Test
